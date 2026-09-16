@@ -12,108 +12,42 @@
   <link rel="apple-touch-icon" href="pages/page-001.jpg">
   <title>상명대학교 스페이스디자인 제36회 졸업전시 도록</title>
   <style>
-    :root{--toolbar-h:58px;--footer-h:32px;--zoom:1;--page-ratio:.756}
+    :root{--toolbar-h:58px;--footer-h:28px}
     *{box-sizing:border-box}
-    html,body{margin:0;width:100%;height:100%;background:#e8e6e2;color:#222;font-family:Arial,"Noto Sans KR",sans-serif;overflow:hidden}
+    html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#e8e6e2;color:#222;font-family:Arial,"Noto Sans KR",sans-serif}
     button,input{font:inherit}
-    .toolbar{height:var(--toolbar-h);display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:#fff;border-bottom:1px solid #d7d7d7;gap:12px;position:relative;z-index:30}
+    .toolbar{height:var(--toolbar-h);display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:#fff;border-bottom:1px solid #d7d7d7;gap:12px;position:relative;z-index:50}
     .brand{display:flex;align-items:baseline;gap:8px;white-space:nowrap}
     .brand b{font-size:16px;letter-spacing:.03em}
     .brand span{font-size:10px;color:#777;letter-spacing:.08em}
-    .controls{display:flex;align-items:center;gap:6px;min-width:0}
+    .controls{display:flex;align-items:center;gap:6px}
     .controls button,.jump-wrap{height:34px;border:1px solid #d6d6d6;background:#fff;border-radius:8px;display:inline-flex;align-items:center;justify-content:center}
     .controls button{min-width:34px;padding:0 10px;cursor:pointer}
     .controls button:hover{background:#f4f4f4}
-    #pageIndicator{min-width:72px;text-align:center;font-size:13px}
+    #pageIndicator{min-width:82px;text-align:center;font-size:13px}
     .jump-wrap{padding:0 6px;gap:3px;font-size:12px}
     .jump-wrap input{width:48px;border:0;outline:0;text-align:center;background:transparent}
-    #viewerShell{position:relative;height:calc(100% - var(--toolbar-h) - var(--footer-h));display:flex;align-items:center;justify-content:center;overflow:hidden;padding:18px}
-    .book{position:relative;display:flex;align-items:stretch;justify-content:center;transform:scale(var(--zoom));transform-origin:center center;filter:drop-shadow(0 10px 18px rgba(0,0,0,.22));transition:transform .18s ease;perspective:2200px}
-    .page{position:relative;background:#fff;overflow:hidden;flex:0 0 auto;aspect-ratio:1264/1672;width:min(43vw,calc((100vh - var(--toolbar-h) - var(--footer-h) - 50px)*var(--page-ratio)));max-height:calc(100vh - var(--toolbar-h) - var(--footer-h) - 50px)}
-    .page img{display:block;width:100%;height:100%;object-fit:contain;background:#fff;user-select:none;-webkit-user-drag:none}
-    .left-page{border-radius:6px 0 0 6px;box-shadow:inset -10px 0 16px -16px rgba(0,0,0,.65)}
-    .right-page{border-radius:0 6px 6px 0;box-shadow:inset 10px 0 16px -16px rgba(0,0,0,.65)}
-    .page.blank{background:transparent;box-shadow:none}
-    .page.blank img{visibility:hidden}
-    .spine{position:absolute;left:50%;top:0;bottom:0;width:2px;transform:translateX(-1px);background:linear-gradient(to right,rgba(0,0,0,.18),rgba(255,255,255,.5),rgba(0,0,0,.12));z-index:4;pointer-events:none}
-    .flip-sheet{position:absolute;top:0;width:50%;height:100%;z-index:25;display:none;transform-style:preserve-3d;pointer-events:none}
-    .flip-sheet.next{left:50%;transform-origin:left center}
-    .flip-sheet.prev{left:0;transform-origin:right center}
-    .flip-sheet.active{display:block}
-    .flip-face{position:absolute;inset:0;background:#fff;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden}
-    .flip-face img{display:block;width:100%;height:100%;object-fit:contain;background:#fff}
-    .flip-front{transform:rotateY(0deg);box-shadow:0 0 18px rgba(0,0,0,.16)}
-    .flip-back{transform:rotateY(180deg);box-shadow:0 0 22px rgba(0,0,0,.20)}
-    .flip-sheet.turn-next{animation:paperNext .68s cubic-bezier(.24,.72,.18,1) forwards}
-    .flip-sheet.turn-prev{animation:paperPrev .68s cubic-bezier(.24,.72,.18,1) forwards}
-    @keyframes paperNext{
-      0%{transform:rotateY(0deg)}
-      28%{transform:rotateY(-48deg)}
-      55%{transform:rotateY(-103deg)}
-      82%{transform:rotateY(-154deg)}
-      100%{transform:rotateY(-180deg)}
-    }
-    @keyframes paperPrev{
-      0%{transform:rotateY(0deg)}
-      28%{transform:rotateY(48deg)}
-      55%{transform:rotateY(103deg)}
-      82%{transform:rotateY(154deg)}
-      100%{transform:rotateY(180deg)}
-    }
-    .hotspot{position:absolute;top:0;bottom:0;width:18%;max-width:240px;border:0;background:transparent;z-index:15;cursor:pointer}
-    .hotspot.left{left:0}.hotspot.right{right:0}
-    .loading{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);padding:9px 13px;border-radius:8px;background:rgba(255,255,255,.9);font-size:13px;z-index:20;display:none}
-    .hint{height:var(--footer-h);display:flex;align-items:center;justify-content:center;background:#f6f6f6;border-top:1px solid #d5d5d5;font-size:11px;color:#777;text-align:center;padding:0 8px}
-    .book.turn-next{animation:turnNext .32s ease}
-    .book.turn-prev{animation:turnPrev .32s ease}
-    @keyframes turnNext{0%{transform:scale(var(--zoom)) perspective(1200px) rotateY(0)}48%{transform:scale(var(--zoom)) perspective(1200px) rotateY(-8deg)}100%{transform:scale(var(--zoom)) perspective(1200px) rotateY(0)}}
-    @keyframes turnPrev{0%{transform:scale(var(--zoom)) perspective(1200px) rotateY(0)}48%{transform:scale(var(--zoom)) perspective(1200px) rotateY(8deg)}100%{transform:scale(var(--zoom)) perspective(1200px) rotateY(0)}}
-    @media (min-width:1001px){
-      .left-page{cursor:w-resize}
-      .right-page{cursor:e-resize}
-    }
-
-    /* 모바일 세로: 1페이지 */
-    @media (max-width:900px) and (orientation:portrait){
+    #viewer{position:relative;height:calc(100% - var(--toolbar-h) - var(--footer-h));display:flex;align-items:center;justify-content:center;overflow:hidden;padding:14px}
+    #book{margin:auto}
+    .page{background:#fff;overflow:hidden}
+    .page img{display:block;width:100%;height:100%;object-fit:fill;user-select:none;-webkit-user-drag:none;pointer-events:none}
+    .loading{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);padding:10px 14px;border-radius:9px;background:rgba(255,255,255,.92);box-shadow:0 4px 14px rgba(0,0,0,.12);font-size:13px;z-index:30}
+    .footer{height:var(--footer-h);display:flex;align-items:center;justify-content:center;border-top:1px solid #d5d5d5;background:#f6f6f6;color:#777;font-size:11px}
+    .stf__parent{margin:auto!important}
+    .stf__block{box-shadow:0 14px 30px rgba(0,0,0,.22)}
+    body.mobile-ui-hidden .toolbar{opacity:0;pointer-events:none;transform:translate(-50%,-10px)}
+    @media (max-width:900px){
       :root{--toolbar-h:0px;--footer-h:0px}
-      .toolbar{position:fixed;top:calc(env(safe-area-inset-top) + 7px);left:50%;width:auto;height:auto;padding:4px 5px;transform:translateX(-50%);border:0;border-radius:14px;background:rgba(255,255,255,.88);box-shadow:0 3px 14px rgba(0,0,0,.16);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:opacity .25s ease,transform .25s ease;z-index:50}
+      .toolbar{position:fixed;top:calc(env(safe-area-inset-top) + 7px);left:50%;width:auto;height:auto;padding:4px 5px;transform:translateX(-50%);border:0;border-radius:14px;background:rgba(255,255,255,.88);box-shadow:0 3px 14px rgba(0,0,0,.16);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:opacity .25s ease,transform .25s ease;z-index:80}
       .brand{display:none}
       .controls{gap:3px}
       .controls button{min-width:32px;height:32px;padding:0 7px;border:0;background:transparent}
-      #fitBtn,.jump-wrap,#zoomOutBtn,#zoomInBtn{display:none}
-      #fullBtn{display:inline-flex;width:34px;font-size:0}
-      #fullBtn::after{content:'⛶';font-size:18px;line-height:1}
-      #pageIndicator{min-width:58px;font-size:12px}
-      #viewerShell{position:fixed;inset:0;width:100vw;height:100dvh;padding:max(2px,env(safe-area-inset-top)) max(2px,env(safe-area-inset-right)) max(2px,env(safe-area-inset-bottom)) max(2px,env(safe-area-inset-left));z-index:1}
-      .book{display:block}
-      .page{width:min(100vw,calc(100dvh*var(--page-ratio)));max-height:100dvh;border-radius:2px}
-      .left-page{display:none!important}
-      .right-page{display:block!important;box-shadow:none}
-      .spine{display:none}
-      .flip-sheet{display:none!important}
-      .hotspot{width:24%}
-      .hint{display:none}
-      body.mobile-ui-hidden .toolbar{opacity:0;pointer-events:none;transform:translate(-50%,-10px)}
-    }
-
-    /* 모바일 가로: 반드시 2페이지 펼침 */
-    @media (max-width:1000px) and (orientation:landscape){
-      :root{--toolbar-h:0px;--footer-h:0px}
-      .toolbar{position:fixed;top:calc(env(safe-area-inset-top) + 5px);left:50%;width:auto;height:auto;padding:3px 5px;transform:translateX(-50%);border:0;border-radius:13px;background:rgba(255,255,255,.86);box-shadow:0 3px 14px rgba(0,0,0,.16);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:opacity .25s ease,transform .25s ease;z-index:50}
-      .brand{display:none}
-      .controls{gap:3px}
-      .controls button{height:30px;min-width:30px;padding:0 6px;border:0;background:transparent}
-      #fitBtn,.jump-wrap,#zoomOutBtn,#zoomInBtn{display:none}
-      #fullBtn{display:inline-flex;width:32px;font-size:0}
-      #fullBtn::after{content:'⛶';font-size:17px;line-height:1}
-      #pageIndicator{min-width:60px;font-size:11px}
-      #viewerShell{position:fixed;inset:0;width:100vw;height:100dvh;padding:max(1px,env(safe-area-inset-top)) max(2px,env(safe-area-inset-right)) max(1px,env(safe-area-inset-bottom)) max(2px,env(safe-area-inset-left));z-index:1}
-      .page{width:min(49.5vw,calc(100dvh*var(--page-ratio)));max-height:100dvh}
-      .left-page,.right-page{display:block!important}
-      .spine{display:block}
-      .flip-sheet{display:none!important}
-      .hint{display:none}
-      body.mobile-ui-hidden .toolbar{opacity:0;pointer-events:none;transform:translate(-50%,-10px)}
+      .jump-wrap{display:none}
+      #pageIndicator{min-width:62px;font-size:12px}
+      #fullBtn{width:34px;font-size:0}
+      #fullBtn::after{content:'⛶';font-size:18px}
+      #viewer{position:fixed;inset:0;width:100vw;height:100dvh;padding:max(2px,env(safe-area-inset-top)) max(2px,env(safe-area-inset-right)) max(2px,env(safe-area-inset-bottom)) max(2px,env(safe-area-inset-left))}
+      .footer{display:none}
     }
   </style>
 </head>
@@ -121,237 +55,147 @@
   <header class="toolbar">
     <div class="brand"><b>36th SMSD</b><span>GRADUATION EXHIBITION</span></div>
     <div class="controls">
-      <button id="prevBtn" aria-label="이전 페이지" title="이전 페이지">‹</button>
+      <button id="prevBtn" title="이전 페이지" aria-label="이전 페이지">‹</button>
       <span id="pageIndicator">1 / 208</span>
-      <button id="nextBtn" aria-label="다음 페이지" title="다음 페이지">›</button>
+      <button id="nextBtn" title="다음 페이지" aria-label="다음 페이지">›</button>
       <label class="jump-wrap" title="페이지 이동"><span>p.</span><input id="jumpInput" type="number" min="1" max="208" value="1"></label>
-      <button id="zoomOutBtn" title="축소">−</button>
-      <button id="zoomInBtn" title="확대">＋</button>
-      <button id="fitBtn" title="화면 맞춤">맞춤</button>
       <button id="fullBtn" title="전체화면">전체화면</button>
     </div>
   </header>
 
-  <main id="viewerShell">
-    <button id="leftHotspot" class="hotspot left" aria-label="이전 페이지"></button>
-    <section id="book" class="book" aria-live="polite">
-      <div id="leftPage" class="page left-page blank"><img alt="왼쪽 페이지"></div>
-      <div id="rightPage" class="page right-page"><img alt="오른쪽 페이지"></div>
-      <div id="flipSheet" class="flip-sheet" aria-hidden="true">
-        <div class="flip-face flip-front"><img id="flipFrontImg" alt=""></div>
-        <div class="flip-face flip-back"><img id="flipBackImg" alt=""></div>
-      </div>
-      <div class="spine" aria-hidden="true"></div>
-    </section>
-    <button id="rightHotspot" class="hotspot right" aria-label="다음 페이지"></button>
+  <main id="viewer">
+    <div id="book"></div>
     <div id="loading" class="loading">도록 준비 중…</div>
   </main>
 
-  <footer class="hint">모바일 세로 1페이지 · 모바일 가로/태블릿/PC 2페이지 · 좌우 스와이프/클릭 · 키보드 ← →</footer>
+  <footer class="footer">페이지 모서리 또는 페이지를 클릭·드래그해 실제 책처럼 넘길 수 있습니다.</footer>
 
   <script>
   (() => {
     const TOTAL = 208;
-    const PAGE_DIR = 'pages/';
+    const PAGE_W = 632;
+    const PAGE_H = 836;
     const book = document.getElementById('book');
-    const leftPage = document.getElementById('leftPage');
-    const rightPage = document.getElementById('rightPage');
-    const leftImg = leftPage.querySelector('img');
-    const rightImg = rightPage.querySelector('img');
+    const loading = document.getElementById('loading');
     const indicator = document.getElementById('pageIndicator');
     const jumpInput = document.getElementById('jumpInput');
-    const loading = document.getElementById('loading');
-    const flipSheet = document.getElementById('flipSheet');
-    const flipFrontImg = document.getElementById('flipFrontImg');
-    const flipBackImg = document.getElementById('flipBackImg');
-    let current = 1;
-    let zoom = 1;
-    let touchX = null;
+    let pageFlip = null;
     let uiTimer = null;
-    let turning = false;
 
-    const src = n => PAGE_DIR + 'page-' + String(n).padStart(3,'0') + '.jpg';
-    const isSingle = () => window.matchMedia('(max-width: 900px) and (orientation: portrait)').matches;
-    const isMobileUI = () => window.matchMedia('(max-width: 1000px)').matches;
+    function loadScript(src){
+      return new Promise((resolve,reject)=>{
+        const s=document.createElement('script');
+        s.src=src;
+        s.onload=resolve;
+        s.onerror=reject;
+        document.head.appendChild(s);
+      });
+    }
+
+    async function ensurePageFlip(){
+      if(window.St && window.St.PageFlip) return;
+      try{
+        await loadScript('https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js');
+      }catch(e){
+        await loadScript('https://unpkg.com/page-flip@2.0.7/dist/js/page-flip.browser.js');
+      }
+    }
+
+    function pageSrc(n){
+      return 'pages/page-' + String(n).padStart(3,'0') + '.jpg';
+    }
+
+    function buildPages(){
+      const frag=document.createDocumentFragment();
+      for(let i=1;i<=TOTAL;i++){
+        const page=document.createElement('div');
+        page.className='page';
+        if(i===1 || i===TOTAL) page.dataset.density='hard';
+        const img=document.createElement('img');
+        img.src=pageSrc(i);
+        img.alt=i+'페이지';
+        img.loading=i<7?'eager':'lazy';
+        img.decoding='async';
+        img.draggable=false;
+        page.appendChild(img);
+        frag.appendChild(page);
+      }
+      book.appendChild(frag);
+    }
+
+    function updateIndicator(index){
+      const p=Math.max(1,Math.min(TOTAL,index+1));
+      indicator.textContent=p+' / '+TOTAL;
+      jumpInput.value=p;
+    }
 
     function revealMobileUI(){
-      if(!isMobileUI()) return;
+      if(!window.matchMedia('(max-width:900px)').matches) return;
       document.body.classList.remove('mobile-ui-hidden');
       clearTimeout(uiTimer);
-      uiTimer = setTimeout(()=>document.body.classList.add('mobile-ui-hidden'),2200);
+      uiTimer=setTimeout(()=>document.body.classList.add('mobile-ui-hidden'),2200);
     }
 
-    function setPage(el,img,n){
-      if(n < 1 || n > TOTAL){
-        el.classList.add('blank');
-        img.removeAttribute('src');
-        return;
+    async function init(){
+      try{
+        await ensurePageFlip();
+        buildPages();
+
+        pageFlip = new St.PageFlip(book,{
+          width: PAGE_W,
+          height: PAGE_H,
+          size: 'stretch',
+          minWidth: 260,
+          maxWidth: PAGE_W,
+          minHeight: 344,
+          maxHeight: PAGE_H,
+          drawShadow: true,
+          flippingTime: 950,
+          usePortrait: true,
+          startZIndex: 0,
+          autoSize: true,
+          maxShadowOpacity: 0.55,
+          showCover: true,
+          mobileScrollSupport: false,
+          swipeDistance: 20,
+          clickEventForward: true,
+          useMouseEvents: true,
+          disableFlipByClick: false
+        });
+
+        pageFlip.on('init', e => {
+          updateIndicator(e.data.page || 0);
+          loading.style.display='none';
+        });
+        pageFlip.on('flip', e => updateIndicator(Number(e.data)||0));
+        pageFlip.loadFromHTML(document.querySelectorAll('.page'));
+        revealMobileUI();
+      }catch(err){
+        loading.textContent='페이지 넘김 모듈을 불러오지 못했습니다. 인터넷 연결을 확인해주세요.';
+        console.error(err);
       }
-      el.classList.remove('blank');
-      img.src = src(n);
-      img.alt = n + '페이지';
     }
 
-    function spreadStart(n){
-      if(n <= 1) return 1;
-      return n % 2 === 0 ? n : n - 1;
-    }
-
-    function spreadPages(n){
-      n = Math.max(1, Math.min(TOTAL, n));
-      if(n === 1) return [0,1];
-      const s = spreadStart(n);
-      return [s, s + 1 <= TOTAL ? s + 1 : 0];
-    }
-
-    function setFlipImage(img,n){
-      if(n < 1 || n > TOTAL){
-        img.removeAttribute('src');
-        img.style.visibility = 'hidden';
-      }else{
-        img.style.visibility = 'visible';
-        img.src = src(n);
-      }
-    }
-
-    function render(){
-      const single = isSingle();
-      current = Math.max(1, Math.min(TOTAL, current));
-      if(single){
-        setPage(leftPage,leftImg,0);
-        setPage(rightPage,rightImg,current);
-        indicator.textContent = current + ' / ' + TOTAL;
-        jumpInput.value = current;
-      }else{
-        const s = spreadStart(current);
-        current = s;
-        if(s === 1){
-          setPage(leftPage,leftImg,0);
-          setPage(rightPage,rightImg,1);
-          indicator.textContent = '1 / ' + TOTAL;
-        }else{
-          setPage(leftPage,leftImg,s);
-          setPage(rightPage,rightImg,s+1);
-          indicator.textContent = s + '–' + Math.min(s+1,TOTAL) + ' / ' + TOTAL;
-        }
-        jumpInput.value = current;
-      }
-      preload();
-    }
-
-    function preload(){
-      const nums = isSingle() ? [current-2,current-1,current+1,current+2] : [current-2,current-1,current+2,current+3];
-      nums.filter(n=>n>=1&&n<=TOTAL).forEach(n=>{const i=new Image();i.src=src(n);});
-    }
-
-    function animate(dir){
-      book.classList.remove('turn-next','turn-prev');
-      void book.offsetWidth;
-      book.classList.add(dir>0?'turn-next':'turn-prev');
-      setTimeout(()=>book.classList.remove('turn-next','turn-prev'),330);
-    }
-
-    function desktopTurn(dir,target){
-      if(turning) return;
-      turning = true;
-      const oldPages = spreadPages(current);
-      const newPages = spreadPages(target);
-      flipSheet.className = 'flip-sheet active ' + (dir > 0 ? 'next' : 'prev');
-
-      if(dir > 0){
-        setFlipImage(flipFrontImg, oldPages[1]);
-        setFlipImage(flipBackImg, newPages[0]);
-      }else{
-        setFlipImage(flipFrontImg, oldPages[0]);
-        setFlipImage(flipBackImg, newPages[1]);
-      }
-
-      void flipSheet.offsetWidth;
-      flipSheet.classList.add(dir > 0 ? 'turn-next' : 'turn-prev');
-
-      setTimeout(()=>{
-        current = target;
-        render();
-      },330);
-
-      setTimeout(()=>{
-        flipSheet.className = 'flip-sheet';
-        turning = false;
-      },700);
-    }
-
-    function next(){
-      const step = isSingle() ? 1 : (current===1 ? 1 : 2);
-      if(current >= TOTAL) return;
-      const target = Math.min(TOTAL,current+step);
-      if(!isMobileUI()){
-        desktopTurn(1,target);
-        return;
-      }
-      animate(1);
-      current = target;
-      setTimeout(render,120);
-    }
-    function prev(){
-      if(current <= 1) return;
-      const step = isSingle() ? 1 : (current===2 ? 1 : 2);
-      const target = Math.max(1,current-step);
-      if(!isMobileUI()){
-        desktopTurn(-1,target);
-        return;
-      }
-      animate(-1);
-      current = target;
-      setTimeout(render,120);
-    }
-
-    document.getElementById('nextBtn').onclick = next;
-    document.getElementById('prevBtn').onclick = prev;
-    document.getElementById('rightHotspot').onclick = next;
-    document.getElementById('leftHotspot').onclick = prev;
-    book.addEventListener('click',e=>{
-      if(isMobileUI() || turning) return;
-      const rect = book.getBoundingClientRect();
-      const midpoint = rect.left + rect.width/2;
-      if(e.clientX < midpoint) prev();
-      else next();
+    document.getElementById('prevBtn').addEventListener('click',()=>{ if(pageFlip) pageFlip.flipPrev('top'); });
+    document.getElementById('nextBtn').addEventListener('click',()=>{ if(pageFlip) pageFlip.flipNext('top'); });
+    jumpInput.addEventListener('change',()=>{
+      if(!pageFlip) return;
+      const n=Math.max(1,Math.min(TOTAL,parseInt(jumpInput.value,10)||1));
+      pageFlip.flip(n-1,'top');
     });
-    jumpInput.addEventListener('change',()=>{const n=parseInt(jumpInput.value,10);if(Number.isFinite(n)){current=Math.max(1,Math.min(TOTAL,n));render();}});
-    document.getElementById('zoomInBtn').onclick = ()=>{zoom=Math.min(1.8,zoom+.1);document.documentElement.style.setProperty('--zoom',zoom)};
-    document.getElementById('zoomOutBtn').onclick = ()=>{zoom=Math.max(.6,zoom-.1);document.documentElement.style.setProperty('--zoom',zoom)};
-    document.getElementById('fitBtn').onclick = ()=>{zoom=1;document.documentElement.style.setProperty('--zoom',1)};
-    document.getElementById('fullBtn').onclick = ()=>{
-      if(!document.fullscreenElement){document.documentElement.requestFullscreen?.();}
-      else{document.exitFullscreen?.();}
-    };
-    document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')next();if(e.key==='ArrowLeft')prev();});
-    document.addEventListener('wheel',e=>{
-      if(e.ctrlKey || Math.abs(e.deltaY)>20){
-        e.preventDefault();
-        zoom = Math.max(.6,Math.min(1.8,zoom + (e.deltaY<0?.08:-.08)));
-        document.documentElement.style.setProperty('--zoom',zoom);
-      }
-    },{passive:false});
-    document.getElementById('viewerShell').addEventListener('touchstart',e=>{
-      revealMobileUI();
-      touchX=e.changedTouches[0].clientX;
-    },{passive:true});
-    document.getElementById('viewerShell').addEventListener('touchend',e=>{
-      if(touchX===null)return;
-      const dx=e.changedTouches[0].clientX-touchX;
-      touchX=null;
-      if(Math.abs(dx)>45){dx<0?next():prev();}
-    },{passive:true});
+    document.getElementById('fullBtn').addEventListener('click',()=>{
+      if(!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+      else document.exitFullscreen?.();
+    });
+    document.addEventListener('keydown',e=>{
+      if(!pageFlip) return;
+      if(e.key==='ArrowRight') pageFlip.flipNext('top');
+      if(e.key==='ArrowLeft') pageFlip.flipPrev('top');
+    });
+    document.getElementById('viewer').addEventListener('touchstart',revealMobileUI,{passive:true});
+    window.addEventListener('orientationchange',()=>setTimeout(revealMobileUI,180));
 
-    let resizeTimer;
-    window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(render,120)});
-    window.addEventListener('orientationchange',()=>{revealMobileUI();setTimeout(render,180)});
-
-    loading.style.display='block';
-    rightImg.addEventListener('load',()=>loading.style.display='none');
-    rightImg.addEventListener('error',()=>{loading.textContent='페이지 이미지를 찾을 수 없습니다.';loading.style.display='block'});
-    render();
-    revealMobileUI();
+    init();
   })();
   </script>
 </body>
