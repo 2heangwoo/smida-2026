@@ -3,6 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
+  <meta name="theme-color" content="#e8e6e2">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>상명대학교 스페이스디자인 제36회 졸업전시 도록</title>
   <style>
     :root{--toolbar-h:58px;--footer-h:32px;--zoom:1;--page-ratio:.756}
@@ -40,38 +44,43 @@
 
     /* 모바일 세로: 1페이지 */
     @media (max-width:900px) and (orientation:portrait){
-      :root{--toolbar-h:52px;--footer-h:28px}
-      .toolbar{padding:6px 8px}
-      .brand span{display:none}
-      .brand b{font-size:14px}
-      .controls{gap:4px}
-      .controls button{min-width:30px;height:32px;padding:0 7px}
-      #fitBtn,#fullBtn,.jump-wrap{display:none}
+      :root{--toolbar-h:0px;--footer-h:0px}
+      .toolbar{position:fixed;top:calc(env(safe-area-inset-top) + 7px);left:50%;width:auto;height:auto;padding:4px 5px;transform:translateX(-50%);border:0;border-radius:14px;background:rgba(255,255,255,.88);box-shadow:0 3px 14px rgba(0,0,0,.16);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:opacity .25s ease,transform .25s ease;z-index:50}
+      .brand{display:none}
+      .controls{gap:3px}
+      .controls button{min-width:32px;height:32px;padding:0 7px;border:0;background:transparent}
+      #fitBtn,.jump-wrap,#zoomOutBtn,#zoomInBtn{display:none}
+      #fullBtn{display:inline-flex;width:34px;font-size:0}
+      #fullBtn::after{content:'⛶';font-size:18px;line-height:1}
       #pageIndicator{min-width:58px;font-size:12px}
-      #viewerShell{padding:10px}
+      #viewerShell{position:fixed;inset:0;width:100vw;height:100dvh;padding:max(2px,env(safe-area-inset-top)) max(2px,env(safe-area-inset-right)) max(2px,env(safe-area-inset-bottom)) max(2px,env(safe-area-inset-left));z-index:1}
       .book{display:block}
-      .page{width:min(96vw,calc((100vh - var(--toolbar-h) - var(--footer-h) - 28px)*var(--page-ratio)));max-height:calc(100vh - var(--toolbar-h) - var(--footer-h) - 28px);border-radius:5px}
+      .page{width:min(100vw,calc(100dvh*var(--page-ratio)));max-height:100dvh;border-radius:2px}
       .left-page{display:none!important}
       .right-page{display:block!important;box-shadow:none}
       .spine{display:none}
       .hotspot{width:24%}
-      .hint{font-size:10px}
+      .hint{display:none}
+      body.mobile-ui-hidden .toolbar{opacity:0;pointer-events:none;transform:translate(-50%,-10px)}
     }
 
     /* 모바일 가로: 반드시 2페이지 펼침 */
     @media (max-width:1000px) and (orientation:landscape){
-      :root{--toolbar-h:46px;--footer-h:24px}
-      .toolbar{padding:5px 8px}
-      .brand span{display:none}
-      .brand b{font-size:13px}
-      .controls button{height:30px;min-width:30px;padding:0 7px}
-      #fitBtn,.jump-wrap{display:none}
+      :root{--toolbar-h:0px;--footer-h:0px}
+      .toolbar{position:fixed;top:calc(env(safe-area-inset-top) + 5px);left:50%;width:auto;height:auto;padding:3px 5px;transform:translateX(-50%);border:0;border-radius:13px;background:rgba(255,255,255,.86);box-shadow:0 3px 14px rgba(0,0,0,.16);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:opacity .25s ease,transform .25s ease;z-index:50}
+      .brand{display:none}
+      .controls{gap:3px}
+      .controls button{height:30px;min-width:30px;padding:0 6px;border:0;background:transparent}
+      #fitBtn,.jump-wrap,#zoomOutBtn,#zoomInBtn{display:none}
+      #fullBtn{display:inline-flex;width:32px;font-size:0}
+      #fullBtn::after{content:'⛶';font-size:17px;line-height:1}
       #pageIndicator{min-width:60px;font-size:11px}
-      #viewerShell{padding:8px}
-      .page{width:min(46vw,calc((100vh - var(--toolbar-h) - var(--footer-h) - 20px)*var(--page-ratio)));max-height:calc(100vh - var(--toolbar-h) - var(--footer-h) - 20px)}
+      #viewerShell{position:fixed;inset:0;width:100vw;height:100dvh;padding:max(1px,env(safe-area-inset-top)) max(2px,env(safe-area-inset-right)) max(1px,env(safe-area-inset-bottom)) max(2px,env(safe-area-inset-left));z-index:1}
+      .page{width:min(49.5vw,calc(100dvh*var(--page-ratio)));max-height:100dvh}
       .left-page,.right-page{display:block!important}
       .spine{display:block}
-      .hint{font-size:9px}
+      .hint{display:none}
+      body.mobile-ui-hidden .toolbar{opacity:0;pointer-events:none;transform:translate(-50%,-10px)}
     }
   </style>
 </head>
@@ -118,9 +127,18 @@
     let current = 1;
     let zoom = 1;
     let touchX = null;
+    let uiTimer = null;
 
     const src = n => PAGE_DIR + 'page-' + String(n).padStart(3,'0') + '.jpg';
     const isSingle = () => window.matchMedia('(max-width: 900px) and (orientation: portrait)').matches;
+    const isMobileUI = () => window.matchMedia('(max-width: 1000px)').matches;
+
+    function revealMobileUI(){
+      if(!isMobileUI()) return;
+      document.body.classList.remove('mobile-ui-hidden');
+      clearTimeout(uiTimer);
+      uiTimer = setTimeout(()=>document.body.classList.add('mobile-ui-hidden'),2200);
+    }
 
     function setPage(el,img,n){
       if(n < 1 || n > TOTAL){
@@ -210,7 +228,10 @@
         document.documentElement.style.setProperty('--zoom',zoom);
       }
     },{passive:false});
-    document.getElementById('viewerShell').addEventListener('touchstart',e=>{touchX=e.changedTouches[0].clientX},{passive:true});
+    document.getElementById('viewerShell').addEventListener('touchstart',e=>{
+      revealMobileUI();
+      touchX=e.changedTouches[0].clientX;
+    },{passive:true});
     document.getElementById('viewerShell').addEventListener('touchend',e=>{
       if(touchX===null)return;
       const dx=e.changedTouches[0].clientX-touchX;
@@ -220,12 +241,13 @@
 
     let resizeTimer;
     window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(render,120)});
-    window.addEventListener('orientationchange',()=>setTimeout(render,180));
+    window.addEventListener('orientationchange',()=>{revealMobileUI();setTimeout(render,180)});
 
     loading.style.display='block';
     rightImg.addEventListener('load',()=>loading.style.display='none');
     rightImg.addEventListener('error',()=>{loading.textContent='페이지 이미지를 찾을 수 없습니다.';loading.style.display='block'});
     render();
+    revealMobileUI();
   })();
   </script>
 </body>
