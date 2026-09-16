@@ -1,40 +1,46 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
-  <title>상명대학교 스페이스디자인 졸업전시 도록</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>상명대학교 스페이스디자인 제36회 졸업전시 도록</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="toolbar">
-    <div class="brand">36th SMSD GRADUATION EXHIBITION</div>
+    <div class="brand">
+      <b>36th SMSD</b><span>GRADUATION EXHIBITION</span>
+    </div>
     <div class="controls">
-      <button id="prevBtn" title="이전 페이지">‹</button>
-      <span id="pageIndicator">- / -</span>
-      <button id="nextBtn" title="다음 페이지">›</button>
+      <button id="prevBtn" aria-label="이전 페이지" title="이전 페이지">‹</button>
+      <span id="pageIndicator">1 / 208</span>
+      <button id="nextBtn" aria-label="다음 페이지" title="다음 페이지">›</button>
+      <label class="jump-wrap" title="페이지 이동">
+        <span>p.</span><input id="jumpInput" type="number" min="1" max="208" value="1">
+      </label>
       <button id="zoomOutBtn" title="축소">−</button>
       <button id="zoomInBtn" title="확대">＋</button>
       <button id="fitBtn" title="화면 맞춤">맞춤</button>
-      <button id="fullBtn" title="전체 화면">전체화면</button>
-      <a id="downloadBtn" class="button-link" href="book.pdf" download>PDF</a>
+      <button id="fullBtn" title="전체화면">전체화면</button>
     </div>
   </header>
 
   <main id="viewerShell">
     <button id="leftHotspot" class="hotspot left" aria-label="이전 페이지"></button>
     <section id="book" class="book" aria-live="polite">
-      <div id="leftPage" class="page left-page"><canvas></canvas></div>
-      <div id="rightPage" class="page right-page"><canvas></canvas></div>
-      <div id="turnPage" class="turn-page"><canvas></canvas></div>
+      <div id="leftPage" class="page left-page"><img alt="왼쪽 페이지"></div>
+      <div id="rightPage" class="page right-page"><img alt="오른쪽 페이지"></div>
+      <div id="turnSheet" class="turn-sheet" aria-hidden="true">
+        <div class="sheet-face sheet-front"><img alt=""></div>
+        <div class="sheet-face sheet-back"><img alt=""></div>
+      </div>
+      <div class="spine" aria-hidden="true"></div>
     </section>
     <button id="rightHotspot" class="hotspot right" aria-label="다음 페이지"></button>
-    <div id="loading" class="loading">PDF 불러오는 중…</div>
+    <div id="loading" class="loading">도록 준비 중…</div>
   </main>
 
-  <footer class="hint">페이지 가장자리 클릭 · 방향키 ← → · 마우스 휠 확대/축소</footer>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs" type="module"></script>
-  <script type="module" src="app.js"></script>
+  <footer class="hint">페이지 가장자리 클릭 · 키보드 ← → · 휠 확대/축소 · 208페이지 전체 수록</footer>
+  <script src="app.js"></script>
 </body>
 </html>
