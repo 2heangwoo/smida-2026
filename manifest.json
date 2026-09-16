@@ -1,0 +1,11 @@
+{
+  "name": "상명대학교 스페이스디자인 제36회 졸업전시 도록",
+  "short_name": "36th SMSD",
+  "description": "상명대학교 스페이스디자인전공 제36회 졸업전시 도록",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#e8e6e2",
+  "theme_color": "#e8e6e2"
+}
