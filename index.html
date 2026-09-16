@@ -212,6 +212,13 @@
     document.getElementById('prevBtn').onclick = prev;
     document.getElementById('rightHotspot').onclick = next;
     document.getElementById('leftHotspot').onclick = prev;
+    book.addEventListener('click',e=>{
+      if(isMobileUI()) return;
+      const rect=book.getBoundingClientRect();
+      const mid=rect.left+rect.width/2;
+      if(e.clientX<mid) prev();
+      else next();
+    });
     jumpInput.addEventListener('change',()=>{const n=parseInt(jumpInput.value,10);if(Number.isFinite(n)){current=Math.max(1,Math.min(TOTAL,n));render();}});
     document.getElementById('zoomInBtn').onclick = ()=>{zoom=Math.min(1.8,zoom+.1);document.documentElement.style.setProperty('--zoom',zoom)};
     document.getElementById('zoomOutBtn').onclick = ()=>{zoom=Math.max(.6,zoom-.1);document.documentElement.style.setProperty('--zoom',zoom)};
